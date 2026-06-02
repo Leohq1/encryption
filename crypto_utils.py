@@ -1,4 +1,5 @@
 import os
+from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
@@ -36,5 +37,5 @@ def decrypt_bytes(encrypted_data: bytes, password: str) -> bytes:
     aesgcm = AESGCM(key)
     try:
         return aesgcm.decrypt(nonce, ciphertext, None)
-    except Exception:
+    except InvalidTag:
         raise ValueError("Decryption failed: invalid password or corrupted file")
