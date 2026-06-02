@@ -21,7 +21,7 @@ def test_round_trip_different_data():
 def test_wrong_password_fails():
     original = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100
     encrypted = encrypt_bytes(original, "correct-password")
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         decrypt_bytes(encrypted, "wrong-password")
 
 
@@ -29,7 +29,7 @@ def test_corrupted_file_fails():
     original = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100
     encrypted = encrypt_bytes(original, "password")
     corrupted = encrypted[:50] + bytes([encrypted[50] ^ 0xFF]) + encrypted[51:]
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         decrypt_bytes(corrupted, "password")
 
 
